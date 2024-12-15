@@ -10,7 +10,7 @@ import java.util.List;
 
 
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://barbershop-frontend-black.vercel.app")
 @RestController
 @RequestMapping("/appointments")
 public class AppointmentController {
