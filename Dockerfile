@@ -1,22 +1,16 @@
-FROM maven:3.8.6-openjdk-17-slim AS build
+FROM ubuntu:latest AS build
 
-WORKDIR /app
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
 
-COPY pom.xml .
+RUN apt-get install maven -y
+RUN mvn clean install
 
-RUN mvn dependency:go-offline
-
-COPY src /app/src
-
-RUN mvn clean package -DskipTests
-
-FROM eclipse-temurin:17-jdk-alpine
-
-WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
-
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+FROM openjdk:17-jdk-slim
 
 EXPOSE 8080
 
+COPY --from=build /target/barbershop_bakend-0.0.1-SNAPSHOT.jar app.jar
+
+ENTRYPOINT [ "java", "-jar", "app.jar" ]
